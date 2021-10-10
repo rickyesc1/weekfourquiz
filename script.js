@@ -76,24 +76,138 @@ timer.addEventListener("click", function () {
 });
 // the event listener triggers the timer that's activated with the button. (the timer shows up on the screen)
 // next i have the questions get rendered to the screen 
+// function clears existing data
 // questions + choices rendered:
 function render(questionIndex) {
-    questionsDiv.innerHTML = "";
-// clears existing data
-    ulCreate.innerHTML = "";
-    for (var i=0; i < questions.length; i++) {
-        var userQuestion = questions[questionIndex].title;
-        var userChoices = questions[questionIndex].choices;
-        questionsDiv.textContent = userQuestion;
-    }
-// for loops loops through all the info in an array ^
-    userChoices.forEach(function (newItem) {
-        var listItem = document.createElement("li");
-        listItem.textContent = newItem;
-        questionsDiv.appendChild(ulCreate);
-        ulCreate.appendChild(listItem);
-        listItem.addEventListener("click", (compare));
+  questionsDiv.innerHTML = "";
+  ulCreate.innerHTML = "";
+  for (var i = 0; i < questions.length; i++) {
+    // appends question title only
+    var userQuestion = questions[questionIndex].title;
+    var userChoices = questions[questionIndex].choices;
+    questionsDiv.textContent = userQuestion;
+  }
 
-    })
+  userChoices.forEach(function (newItem) {
+    var listItem = document.createElement("li");
+    listItem.textContent = newItem;
+    questionsDiv.appendChild(ulCreate);
+    ulCreate.appendChild(listItem);
+    listItem.addEventListener("click", (compare));
+  })
 }
+// for loops loops through all the info in an array ^
 // there's a new "forEach" for each of the question choices.
+function compare(event) {
+  var element = event.target;
+
+  if (element.matches("li")) {
+
+    var createDiv = document.createElement("div");
+    createDiv.setAttribute("id", "createDiv");
+    // correct condition:
+    if (element.textContent == questions[questionIndex].answer) {
+      score++;
+      createDiv.textContent = "Great job! The answer is:   " + questions[questionIndex].answer;
+      // correct condition
+    } else {
+      // adding condition to deduct 10 seconds off of the player's timer if they get a question wrong
+      secondsLeft = secondsLeft - penalty;
+      createDiv.textContent = "WHOOPS! Wrong, the correct answer is:   " + questions.questionIndex.answer;
+    }
+  }
+
+
+  // Next we use question index in order to determine the number question that the user is on
+  questionIndex++;
+
+  if (questionIndex >= questions.length) {
+    // all done will append the last page with the user's score
+    allDone();
+    createDiv.textContent = "Congrats! You've reached the end!" + " " + "You got   " + score + "/" + questions.length + " Correct!";
+  } else {
+    render(questionIndex);
+  }
+  questionsDiv.appendChild(createDiv);
+
+}
+
+// I am using "all done" to append the last page. 
+function allDone() {
+  questionsDiv.innerHTML = "";
+  currentTime.innerHTML = "";
+  // heading goes below:
+  var createH1 = document.createElement("h1");
+  createH1.setAttribute("id", "createH1");
+  createH1.textContent = "ALL DONE!"
+
+  questionsDiv.appendChild(createH1);
+
+  // create paragraph element 
+  var createP = document.createElement("p");
+  createP.setAttribute("id", "createP");
+
+  questionsDiv.appendChild(createP);
+
+  // next we calculate the amount of time remaining and replaces it with the score at the end
+  if (ssecondsLeft >= 0) {
+    var timeRemaining = secondsLeft;
+    var createP2 = document.createElement("p");
+    clearInterval(holdInterval);
+    createP.textContent = "Your final score is: " + timeRemaining;
+
+    questionsDiv.appendChild(createP2);
+  }
+
+  // Add label
+  var createLabel = document.createElement("label");
+  createLabel.setAttribute("id", "createLabel");
+  createLabel.textContent = "Enter your initials to save your score!";
+
+  questionsDiv.appendChild(createLabel);
+
+  // input of initials/value/information
+  var createInput = document.createElement("input");
+  createInput.setAttribute("type", "text");
+  createInput.setAttribute("id", "initials");
+  createInput.textContent = "";
+
+  questionsDiv.appendChild(createInput);
+
+  // submission 
+  var createSubmit = document.createElement("button");
+  createSubmit.setAttribute("type", "submit");
+  createSubmit.setAttribute("id", "submit");
+  createSubmit.textContent = "Submit";
+
+  questionsDiv.appendChild(createSubmit);
+
+  // up until this point the new variables that I have added do not show up on the console until we add an event listener.
+  createSubmit.addEventListener("click", function () {
+      var initials = createInput.value;
+
+      if (initials === null) {
+
+          console.log("This space can't be empty !");
+
+      } else {
+          var finalScore = {
+              initials: initials,
+              score: timeRemaining
+          }
+          console.log(finalScore);
+          var allScores = localStorage.getItem("allScores");
+          if (allScores === null) {
+              allScores = [];
+          } else {
+              allScores = JSON.stringify(allScores);
+          }
+          allScores.push(finalScore);
+          var newScore = JSON.stringify(allScores);
+          localStorage.setItem("allScores," newScore);
+
+          window.location.replace("./HighScores.html");
+      }
+  });
+  
+}
