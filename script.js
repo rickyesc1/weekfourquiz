@@ -42,131 +42,134 @@ var questions = [
     answer: "all of the above",
   },
 ];
-// Five questions total  on first deployment. If all runs smoothly I will try to add more.
-//Declared variables:
+// Declared variables
 var score = 0;
 var questionIndex = 0;
-// working code and further declared variables can go under here
+
+// Start working code 
+// Declared variables
 var currentTime = document.querySelector("#currentTime");
 var timer = document.querySelector("#startTime");
 var questionsDiv = document.querySelector("#questionsDiv");
 var wrapper = document.querySelector("#wrapper");
 
+// Seconds left is 15 seconds per question:
 var secondsLeft = 76;
+// Holds interval time
 var holdInterval = 0;
+// Holds penalty time
 var penalty = 10;
-// seconds left is 15 seconds per question plus one second for the timer to be triggered. We are also holding the interval time of 0 and a pentalty time of 10 (should it be !10 or -10?)
+// Creates new element
 var ulCreate = document.createElement("ul");
-// creates a new element without having to go to html
 
+// Triggers timer on button, shows user a display on the screen
 timer.addEventListener("click", function () {
+  // We are checking zero because its originally set to zero
   if (holdInterval === 0) {
-    holdInterval = setInterval(function () {
-      secondsLeft--;
-      currentTime.textContent = "Time:" + secondsLeft;
+      holdInterval = setInterval(function () {
+          secondsLeft--;
+          currentTime.textContent = "Time: " + secondsLeft;
 
-      if (secondsLeft <= 0) {
-        clearInterval(holdInterval);
-        allDone();
-        currentTime.textContent = "Time's Up!";
-      }
-    }, 1000);
+          if (secondsLeft <= 0) {
+              clearInterval(holdInterval);
+              allDone();
+              currentTime.textContent = "Time's up!";
+          }
+      }, 1000);
   }
   render(questionIndex);
 });
-// the event listener triggers the timer that's activated with the button. (the timer shows up on the screen)
-// next i have the questions get rendered to the screen 
-// function clears existing data
-// questions + choices rendered:
+
+// Renders questions and choices to page: 
 function render(questionIndex) {
+  // Clears existing data 
   questionsDiv.innerHTML = "";
   ulCreate.innerHTML = "";
+  // For loops to loop through all info in array
   for (var i = 0; i < questions.length; i++) {
-    // appends question title only
-    var userQuestion = questions[questionIndex].title;
-    var userChoices = questions[questionIndex].choices;
-    questionsDiv.textContent = userQuestion;
+      // Appends question title only
+      var userQuestion = questions[questionIndex].title;
+      var userChoices = questions[questionIndex].choices;
+      questionsDiv.textContent = userQuestion;
   }
-
+  // New for each for question choices
   userChoices.forEach(function (newItem) {
-    var listItem = document.createElement("li");
-    listItem.textContent = newItem;
-    questionsDiv.appendChild(ulCreate);
-    ulCreate.appendChild(listItem);
-    listItem.addEventListener("click", (compare));
+      var listItem = document.createElement("li");
+      listItem.textContent = newItem;
+      questionsDiv.appendChild(ulCreate);
+      ulCreate.appendChild(listItem);
+      listItem.addEventListener("click", (compare));
   })
 }
-// for loops loops through all the info in an array ^
-// there's a new "forEach" for each of the question choices.
+// Event to compare choices with answer
 function compare(event) {
   var element = event.target;
 
   if (element.matches("li")) {
 
-    var createDiv = document.createElement("div");
-    createDiv.setAttribute("id", "createDiv");
-    // correct condition:
-    if (element.textContent == questions[questionIndex].answer) {
-      score++;
-      createDiv.textContent = "Great job! The answer is:   " + questions[questionIndex].answer;
-      // correct condition
-    } else {
-      // adding condition to deduct 10 seconds off of the player's timer if they get a question wrong
-      secondsLeft = secondsLeft - penalty;
-      createDiv.textContent = "WHOOPS! Wrong, the correct answer is:   " + questions.questionIndex.answer;
-    }
+      var createDiv = document.createElement("div");
+      createDiv.setAttribute("id", "createDiv");
+      // Correct condition 
+      if (element.textContent == questions[questionIndex].answer) {
+          score++;
+          createDiv.textContent = "Correct! The answer is:  " + questions[questionIndex].answer;
+          // Correct condition 
+      } else {
+          // Will deduct -5 seconds off secondsLeft for wrong answers
+          secondsLeft = secondsLeft - penalty;
+          createDiv.textContent = "Wrong! The correct answer is:  " + questions[questionIndex].answer;
+      }
+
   }
-
-
-  // Next we use question index in order to determine the number question that the user is on
+  // Question Index determines number question user is on
   questionIndex++;
 
   if (questionIndex >= questions.length) {
-    // all done will append the last page with the user's score
-    allDone();
-    createDiv.textContent = "Congrats! You've reached the end!" + " " + "You got   " + score + "/" + questions.length + " Correct!";
+      // All done will append last page with user stats
+      allDone();
+      createDiv.textContent = "End of quiz!" + " " + "You got  " + score + "/" + questions.length + " Correct!";
   } else {
-    render(questionIndex);
+      render(questionIndex);
   }
   questionsDiv.appendChild(createDiv);
 
 }
-
-// I am using "all done" to append the last page. 
+// All done will append last page
 function allDone() {
   questionsDiv.innerHTML = "";
   currentTime.innerHTML = "";
-  // heading goes below:
+
+  // Heading:
   var createH1 = document.createElement("h1");
   createH1.setAttribute("id", "createH1");
-  createH1.textContent = "ALL DONE!"
+  createH1.textContent = "All Done!"
 
   questionsDiv.appendChild(createH1);
 
-  // create paragraph element 
+  // Paragraph
   var createP = document.createElement("p");
   createP.setAttribute("id", "createP");
 
   questionsDiv.appendChild(createP);
 
-  // next we calculate the amount of time remaining and replaces it with the score at the end
-  if (ssecondsLeft >= 0) {
-    var timeRemaining = secondsLeft;
-    var createP2 = document.createElement("p");
-    clearInterval(holdInterval);
-    createP.textContent = "Your final score is: " + timeRemaining;
+  // Calculates time remaining and replaces it with score
+  if (secondsLeft >= 0) {
+      var timeRemaining = secondsLeft;
+      var createP2 = document.createElement("p");
+      clearInterval(holdInterval);
+      createP.textContent = "Your final score is: " + timeRemaining;
 
-    questionsDiv.appendChild(createP2);
+      questionsDiv.appendChild(createP2);
   }
 
-  // Add label
+  // Label
   var createLabel = document.createElement("label");
   createLabel.setAttribute("id", "createLabel");
-  createLabel.textContent = "Enter your initials to save your score!";
+  createLabel.textContent = "Enter your initials: ";
 
   questionsDiv.appendChild(createLabel);
 
-  // input of initials/value/information
+  // input
   var createInput = document.createElement("input");
   createInput.setAttribute("type", "text");
   createInput.setAttribute("id", "initials");
@@ -174,21 +177,21 @@ function allDone() {
 
   questionsDiv.appendChild(createInput);
 
-  // submission 
+  // submit
   var createSubmit = document.createElement("button");
   createSubmit.setAttribute("type", "submit");
-  createSubmit.setAttribute("id", "submit");
+  createSubmit.setAttribute("id", "Submit");
   createSubmit.textContent = "Submit";
 
   questionsDiv.appendChild(createSubmit);
 
-  // up until this point the new variables that I have added do not show up on the console until we add an event listener.
+  // Event listener to capture initials and local storage for initials and score
   createSubmit.addEventListener("click", function () {
       var initials = createInput.value;
 
       if (initials === null) {
 
-          console.log("This space can't be empty !");
+          console.log("No value entered!");
 
       } else {
           var finalScore = {
@@ -200,14 +203,16 @@ function allDone() {
           if (allScores === null) {
               allScores = [];
           } else {
-              allScores = JSON.stringify(allScores);
+              allScores = JSON.parse(allScores);
           }
           allScores.push(finalScore);
           var newScore = JSON.stringify(allScores);
-          localStorage.setItem("allScores," newScore);
-
+          localStorage.setItem("allScores", newScore);
+          // Travels to final page
           window.location.replace("./HighScores.html");
       }
   });
-  
+
 }
+
+

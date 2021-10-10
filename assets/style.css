@@ -1,21 +1,14 @@
-        #flex-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: row;
-            text-align: center;
-        }     
-     
+        
         #wrapper {
             position: absolute;
             left: 30%;
             top: 20%;
             width: 500px;
             height: 500px;
-            border: 1px solid rgb(71, 194, 102);
+            border: 1px solid purple;
         }
         #startTime {
-            background-color: rgb(71, 194, 102);
+            background-color: purple;
             margin-left: 33%;
             padding: 15px 32px;
             font-size: 20px;
@@ -30,7 +23,7 @@
         }
 
         #goBack {
-            background-color: rgb(71, 194, 102);
+            background-color: purple;
             position: relative;
             padding: 10px;
             font-size: 20px;
@@ -45,7 +38,7 @@
 
 
         #clear {
-            background-color: rgb(71, 194, 102);
+            background-color: purple;
             position: relative;
             padding: 10px;
             font-size: 20px;
@@ -65,11 +58,11 @@
         }
 
         #Submit {
-            background-color: rgb(71, 194, 102);
+            background-color: purple;
             margin-left: 33%;
             padding: 15px 32px;
             font-size: 20px;
-            color: x
+            color: white;
         }
 
         label {
@@ -78,7 +71,7 @@
         input {
             margin-bottom: 20px;
             width: 50%;
-            border: 1px solid rgb(202, 34, 202);
+            border: 1px solid lightgray;
         }
 
         h1 {
@@ -86,7 +79,7 @@
         }
 
         li {
-            background-color: rgb(71, 194, 102);dsv                                                                                                                                     
+            background-color: purple;
             margin-top: 10px;
             padding: 5px 15px;
             width: 80%;
@@ -96,7 +89,7 @@
 
         #createDiv {
             margin-top: 20px;
-            border-top: 1px solid rgb(202, 34, 202)cc;
+            border-top: 1px solid lightgray;
         }
 
         /* Start media queries */
@@ -144,4 +137,5 @@
           margin-left: 10%;
       }
 
-    
+     
+}
